@@ -66,17 +66,15 @@ Click the "Submit" button to finalize your schema. The final schema will be logg
 ## Project Structure
 
 ```
-json-schema-builder/
+frontend/
 ├── src/
 │   ├── components/
-│   │   ├── SchemaBuilder.tsx    # Main component for the schema builder
-│   │   └── SchemaField.tsx      # Component for individual fields
+│   │   ├── SchemaBuilder.tsx   
+│   │   └── SchemaField.tsx     
 │   ├── styles/
-│   │   └── SchemaBuilder.css    # Styles for the schema builder
-│   ├── App.tsx                  # Root application component
-│   └── index.tsx                # Application entry point
-└── public/
-    └── index.html               # HTML template
+│   │   └── SchemaBuilder.css   
+│   ├── App.tsx                 
+│   └── index.tsx                       
 ```
 
 ## Technologies Used
