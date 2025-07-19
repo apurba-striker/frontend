@@ -1,4 +1,4 @@
-import React from "react";
+import * as React from "react";
 import { Input, Select, Button, Switch, Space } from "antd";
 import { CloseOutlined } from "@ant-design/icons";
 import { SchemaFieldData } from "./SchemaBuilder";
@@ -18,13 +18,13 @@ const SchemaField: React.FC<SchemaFieldProps> = ({
   deleteField,
   depth,
 }) => {
+  const [nestedFieldCounter, setNestedFieldCounter] = React.useState(0);
+
   const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     updateField(field.id, { name: e.target.value });
   };
 
-  const handleTypeChange = (
-    value: "string" | "number" | "nested" | "objectId" | "float" | "boolean"
-  ) => {
+  const handleTypeChange = (value: "string" | "number" | "nested") => {
     updateField(field.id, { type: value });
   };
 
@@ -39,11 +39,14 @@ const SchemaField: React.FC<SchemaFieldProps> = ({
       type: "string",
       enabled: true,
       children: [],
+      order: nestedFieldCounter,
     };
 
     updateField(field.id, {
       children: [...(field.children || []), newNestedField],
     });
+
+    setNestedFieldCounter(nestedFieldCounter + 1);
   };
 
   const updateNestedField = (
@@ -81,9 +84,6 @@ const SchemaField: React.FC<SchemaFieldProps> = ({
           <Option value="string">string</Option>
           <Option value="number">number</Option>
           <Option value="nested">nested</Option>
-          <Option value="objectId">objectId</Option>
-          <Option value="float">float</Option>
-          <Option value="boolean">boolean</Option>
         </Select>
         <Switch
           checked={field.enabled}

@@ -1,17 +1,13 @@
-import React, { useState } from "react";
+// Import React without using element.ref
+import * as React from "react";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Button, Card, Row, Col } from "antd";
 import SchemaField from "./SchemaField";
 import "antd/dist/antd.css";
 import "../styles/SchemaBuilder.css";
 
-type FieldType =
-  | "string"
-  | "number"
-  | "nested"
-  | "objectId"
-  | "float"
-  | "boolean";
+type FieldType = "string" | "number" | "nested";
 
 export interface SchemaFieldData {
   id: string;
@@ -19,11 +15,13 @@ export interface SchemaFieldData {
   type: FieldType;
   enabled: boolean;
   children?: SchemaFieldData[];
+  order?: number;
 }
 
 const SchemaBuilder: React.FC = () => {
   const { handleSubmit } = useForm();
   const [fields, setFields] = useState<SchemaFieldData[]>([]);
+  const [fieldCounter, setFieldCounter] = useState(0);
 
   const addField = () => {
     const newField: SchemaFieldData = {
@@ -32,8 +30,10 @@ const SchemaBuilder: React.FC = () => {
       type: "string",
       enabled: true,
       children: [],
+      order: fieldCounter,
     };
     setFields([...fields, newField]);
+    setFieldCounter(fieldCounter + 1);
   };
 
   const updateField = (id: string, updatedField: Partial<SchemaFieldData>) => {
@@ -51,14 +51,21 @@ const SchemaBuilder: React.FC = () => {
   const generateJsonSchema = () => {
     const schema: Record<string, any> = {};
 
-    fields.forEach((field) => {
-      if (field.enabled && field.name) {
-        const fieldName = field.name.toLowerCase();
-        if (field.type === "nested") {
-          schema[fieldName] = generateNestedSchema(field.children || []);
-        } else {
-          schema[fieldName] = getValueForType(field.type);
-        }
+    // Sort fields by their order (the order they were added)
+    const sortedFields = [...fields]
+      .filter((field) => field.enabled && field.name)
+      .sort((a, b) => (a.order || 0) - (b.order || 0));
+
+    // Process fields in their sorted order
+    sortedFields.forEach((field) => {
+      const fieldName = field.name.toLowerCase();
+      if (field.type === "nested") {
+        schema[fieldName] = generateNestedSchema(
+          field.children || [],
+          field.id
+        );
+      } else {
+        schema[fieldName] = getValueForType(field.type);
       }
     });
 
@@ -71,30 +78,32 @@ const SchemaBuilder: React.FC = () => {
         return "STRING";
       case "number":
         return "number";
-      case "objectId":
-        return "objectId";
-      case "float":
-        return "float";
-      case "boolean":
-        return "boolean";
       default:
         return "";
     }
   };
 
   const generateNestedSchema = (
-    children: SchemaFieldData[]
-  ): Record<string, any> => {
+    children: SchemaFieldData[],
+    parentId: string
+  ): any => {
     const schema: Record<string, any> = {};
 
-    children.forEach((child) => {
-      if (child.enabled && child.name) {
-        const childName = child.name.toLowerCase();
-        if (child.type === "nested") {
-          schema[childName] = generateNestedSchema(child.children || []);
-        } else {
-          schema[childName] = getValueForType(child.type);
-        }
+    // Sort children by their order (the order they were added)
+    const sortedChildren = [...children]
+      .filter((child) => child.enabled && child.name)
+      .sort((a, b) => (a.order || 0) - (b.order || 0));
+
+    // Process children in their sorted order
+    sortedChildren.forEach((child) => {
+      const childName = child.name.toLowerCase();
+      if (child.type === "nested") {
+        schema[childName] = generateNestedSchema(
+          child.children || [],
+          child.id
+        );
+      } else {
+        schema[childName] = getValueForType(child.type);
       }
     });
 
@@ -129,7 +138,9 @@ const SchemaBuilder: React.FC = () => {
   };
 
   const onSubmit = () => {
-    console.log("Schema submitted:", generateJsonSchema());
+    const schema = generateJsonSchema();
+    console.log("Schema submitted:");
+    console.log(JSON.stringify(schema, null, 2));
   };
 
   return (

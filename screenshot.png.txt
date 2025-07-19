@@ -1,0 +1,8 @@
+This is a placeholder for the screenshot.png file.
+Please replace this with an actual screenshot of your JSON Schema Builder application.
+
+To take a screenshot:
+1. Run the application using 'npm start'
+2. Open your browser to http://localhost:3000
+3. Use your operating system's screenshot tool to capture the JSON Schema Builder interface
+4. Save the screenshot as 'screenshot.png' in the root directory of the project 

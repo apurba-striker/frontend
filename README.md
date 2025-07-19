@@ -1,46 +1,91 @@
-# Getting Started with Create React App
+# JSON Schema Builder
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+A dynamic, interactive tool for building JSON schemas with a real-time preview.
 
-## Available Scripts
+## Features
 
-In the project directory, you can run:
+- Create and edit JSON schema fields dynamically
+- Support for data types:
+  - String
+  - Number
+  - Nested objects
+- Nested field support with unlimited depth
+- Real-time JSON preview
+- Enable/disable fields with toggle switches
+- Responsive side-by-side layout
 
-### `npm start`
+## Installation
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+1. Clone the repository:
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+```bash
+git clone https://github.com/apurba-striker/frontend
+cd frontend
+```
 
-### `npm test`
+2. Install dependencies:
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+```bash
+npm install
+```
 
-### `npm run build`
+3. Start the development server:
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+```bash
+npm start
+```
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+4. Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## Usage
 
-### `npm run eject`
+### Adding Fields
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+Click the "+ Add Item" button to add a new field to your schema. Each field consists of:
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+- A name input
+- A type selector (string, number, nested)
+- An enable/disable toggle
+- A delete button
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+### Creating Nested Fields
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+1. Add a field and set its type to "nested"
+2. Enable the field using the toggle switch
+3. Additional "+ Add Item" buttons will appear for adding nested fields
+4. Nested fields can be further nested to create complex hierarchical structures
 
-## Learn More
+### Real-time JSON Preview
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+The JSON preview on the right side updates in real-time as you build your schema, showing the exact JSON structure that will be generated.
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+### Submitting the Schema
+
+Click the "Submit" button to finalize your schema. The final schema will be logged to the console.
+
+## Project Structure
+
+```
+json-schema-builder/
+├── src/
+│   ├── components/
+│   │   ├── SchemaBuilder.tsx    # Main component for the schema builder
+│   │   └── SchemaField.tsx      # Component for individual fields
+│   ├── styles/
+│   │   └── SchemaBuilder.css    # Styles for the schema builder
+│   ├── App.tsx                  # Root application component
+│   └── index.tsx                # Application entry point
+└── public/
+    └── index.html               # HTML template
+```
+
+## Technologies Used
+
+- React
+- TypeScript
+- Ant Design
+- React Hook Form
+
+## License
+
+[MIT](LICENSE)
